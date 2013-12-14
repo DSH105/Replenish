@@ -1,0 +1,28 @@
+name: ${project.name}
+version: ${project.version}
+author: DSH105
+website: ${project.url}
+main: ${main.class}
+commands:
+    replenish:
+        description: Create blocks that automagically restore themselves and drop custom items.
+        usage: Incorrect syntax! Use /replenish for help
+permissions:
+    replenish.replenish:
+        description: Required to perform the Replenish command.
+    replenish.create:
+        description: Required to create Replenish block data.
+    replenish.remove:
+        description: Required to remove Replenish block data.
+    replenish.update:
+        description: Required to update Replenish.
+    replenish.build:
+        description: Required to build with the plugin enabled.
+    replenish.*:
+        description:
+        children:
+            replenish.replenish: true
+            replenish.create: true
+            replenish.remove: true
+            replenish.update: true
+            replenish.build: true
