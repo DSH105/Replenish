@@ -23,6 +23,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>${minecraft.version}-${craftbukkit.version}-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.github.dsh105</groupId>
             <artifactId>DSHUtils</artifactId>
             <version>${dshutils.version}</version>
