@@ -5,11 +5,12 @@ import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.logger.Logger;
 import io.github.dsh105.dshutils.util.EnumUtil;
 import io.github.dsh105.dshutils.util.GeneralUtil;
-import io.github.dsh105.replenish.InfoStorage;
+import io.github.dsh105.replenish.util.InfoStorage;
 import io.github.dsh105.replenish.ReplenishPlugin;
 import io.github.dsh105.replenish.config.ConfigOptions;
 import io.github.dsh105.replenish.config.DataConfigOptions;
 import io.github.dsh105.replenish.util.Lang;
+import io.github.dsh105.replenish.util.Perm;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -127,7 +128,7 @@ public class BlockListener implements Listener {
         }
 
         if (!ConfigOptions.instance.getConfig().getBoolean("allowBlockBreak", false)) {
-            if (!player.hasPermission("replenish.build")) {
+            if (!Perm.BUILD.hasPerm(player, false, false)) {
                 if (!event.isCancelled()) {
                     event.setCancelled(true);
                 }

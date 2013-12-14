@@ -98,7 +98,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>io.github.dsh105.dshutils</pattern>
-                                    <shadedPattern>io.github.dsh105.echopet.libraries.dshutils</shadedPattern>
+                                    <shadedPattern>io.github.dsh105.replenish.libs.dshutils</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

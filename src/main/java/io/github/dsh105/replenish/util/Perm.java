@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public enum Perm {
 
     UPDATE("replenish.update", "replenish.replenish", "replenish.*"),
+    BUILD("replenish.build", "", "replenish.*"),
     CREATE("replenish.create", "replenish.replenish", "replenish.*"),
     REMOVE("replenish.remove", "replenish.replenish", "replenish.*"),
     BIND("replenish.bind", "replenish.replenish", "replenish.*"),

@@ -4,7 +4,7 @@ import io.github.dsh105.dshutils.Updater;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.pagination.Paginator;
 import io.github.dsh105.dshutils.util.GeneralUtil;
-import io.github.dsh105.replenish.InfoStorage;
+import io.github.dsh105.replenish.util.InfoStorage;
 import io.github.dsh105.replenish.ReplenishPlugin;
 import io.github.dsh105.replenish.util.Lang;
 import io.github.dsh105.replenish.util.Perm;

@@ -11,6 +11,7 @@ import io.github.dsh105.replenish.commands.ReplenishCommand;
 import io.github.dsh105.replenish.config.ConfigOptions;
 import io.github.dsh105.replenish.config.DataConfigOptions;
 import io.github.dsh105.replenish.listeners.BlockListener;
+import io.github.dsh105.replenish.util.InfoStorage;
 import io.github.dsh105.replenish.util.Lang;
 import org.bukkit.*;
 import org.bukkit.block.Block;
