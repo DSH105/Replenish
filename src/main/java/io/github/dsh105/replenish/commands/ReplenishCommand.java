@@ -3,7 +3,7 @@ package io.github.dsh105.replenish.commands;
 import io.github.dsh105.dshutils.Updater;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.pagination.Paginator;
-import io.github.dsh105.dshutils.util.GeneralUtil;
+import io.github.dsh105.dshutils.util.StringUtil;
 import io.github.dsh105.replenish.util.InfoStorage;
 import io.github.dsh105.replenish.ReplenishPlugin;
 import io.github.dsh105.replenish.util.Lang;
@@ -53,7 +53,7 @@ public class ReplenishCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.DARK_AQUA + "------------------------------------------------------------");
                 return true;
             } else if (args.length == 2) {
-                if (GeneralUtil.isInt(args[1])) {
+                if (StringUtil.isInt(args[1])) {
                     String[] help = this.help.getPage(Integer.parseInt(args[1]));
                     if (help == null) {
                         Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
@@ -196,14 +196,14 @@ public class ReplenishCommand implements CommandExecutor {
                     String s = "";
                     for (int i = 1; i <= 3; i++) {
                         if (i == 2 && args[i].contains("stack:")) {
-                            if (GeneralUtil.isInt(args[i].split(":")[1])) {
+                            if (StringUtil.isInt(args[i].split(":")[1])) {
                                 s = (s == "" || s == null) ? "" + i : ":" + i;
                             } else {
                                 Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
                                 return true;
                             }
                         }
-                        if (GeneralUtil.isInt(args[i])) {
+                        if (StringUtil.isInt(args[i])) {
                             s = (s == "" || s == null) ? "" + i : ":" + i;
                         } else {
                             Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
@@ -225,14 +225,14 @@ public class ReplenishCommand implements CommandExecutor {
                     String s = "";
                     for (int i = 1; i <= 4; i++) {
                         if (i == 2 && args[i].contains("stack:")) {
-                            if (GeneralUtil.isInt(args[i].split(":")[1])) {
+                            if (StringUtil.isInt(args[i].split(":")[1])) {
                                 s = (s == "" || s == null) ? "" + i : ":" + i;
                             } else {
                                 Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
                                 return true;
                             }
                         }
-                        if (GeneralUtil.isInt(args[i])) {
+                        if (StringUtil.isInt(args[i])) {
                             s = (s == "" || s == null) ? "" + i : ":" + i;
                         } else if (i == 1 && args[i].equalsIgnoreCase("all")) {
                             s = args[i].toLowerCase();
@@ -259,7 +259,7 @@ public class ReplenishCommand implements CommandExecutor {
             }
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.toString()
-                .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : GeneralUtil.combineSplit(0, args, " "))));
+                .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : StringUtil.combineSplit(0, args, " "))));
         return true;
     }
     

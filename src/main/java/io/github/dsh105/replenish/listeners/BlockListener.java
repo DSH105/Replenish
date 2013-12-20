@@ -4,7 +4,7 @@ import io.github.dsh105.dshutils.Particle;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.logger.Logger;
 import io.github.dsh105.dshutils.util.EnumUtil;
-import io.github.dsh105.dshutils.util.GeneralUtil;
+import io.github.dsh105.dshutils.util.StringUtil;
 import io.github.dsh105.replenish.util.InfoStorage;
 import io.github.dsh105.replenish.ReplenishPlugin;
 import io.github.dsh105.replenish.config.ConfigOptions;
@@ -139,11 +139,11 @@ public class BlockListener implements Listener {
     public void replenish(Player p, Block targetBlock, int mined, String drop, int restore) {
         Location l = targetBlock.getLocation();
         int dropChance = ConfigOptions.instance.getConfig().getInt("drop.chance", 100);
-        if (GeneralUtil.r().nextInt(99) < dropChance) {
+        if (StringUtil.r().nextInt(99) < dropChance) {
             int minAmount = ConfigOptions.instance.getConfig().getInt("drop.min-quantity", 1);
             int maxAmount = ConfigOptions.instance.getConfig().getInt("drop.max-quantity", 3);
-            int i = GeneralUtil.r().nextInt(maxAmount - minAmount);
-            if (GeneralUtil.r().nextInt(3) > 0) {
+            int i = StringUtil.r().nextInt(maxAmount - minAmount);
+            if (StringUtil.r().nextInt(3) > 0) {
                 i /= 2;
             }
 

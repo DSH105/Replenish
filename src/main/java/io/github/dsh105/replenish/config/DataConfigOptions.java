@@ -2,8 +2,7 @@ package io.github.dsh105.replenish.config;
 
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.config.options.Options;
-import io.github.dsh105.dshutils.util.GeneralUtil;
-import org.bukkit.ChatColor;
+import io.github.dsh105.dshutils.util.StringUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,18 +28,18 @@ public class DataConfigOptions extends Options {
         ItemStack i = new ItemStack(mat, amount);
         ItemMeta meta = i.getItemMeta();
         if (name != null && !name.equalsIgnoreCase("")) {
-            meta.setDisplayName(GeneralUtil.replaceStringWithColours(name));
+            meta.setDisplayName(StringUtil.replaceStringWithColours(name));
         }
         if (l != null && !l.equalsIgnoreCase("")) {
             if (l.contains(",")) {
                 String[] s = l.split(",");
                 ArrayList<String> list = new ArrayList<String>();
                 for (String str : s) {
-                    list.add(GeneralUtil.replaceStringWithColours(str));
+                    list.add(StringUtil.replaceStringWithColours(str));
                 }
                 meta.setLore(list);
             } else {
-                meta.setLore(Arrays.asList(new String[] {GeneralUtil.replaceStringWithColours(l)}));
+                meta.setLore(Arrays.asList(new String[] {StringUtil.replaceStringWithColours(l)}));
             }
         }
         i.setItemMeta(meta);
