@@ -32,6 +32,7 @@ public class ReplenishCommand implements CommandExecutor {
         String[] s = new String[] {
                 ChatColor.AQUA + "/replenish help <command>" + ChatColor.DARK_AQUA + " - View help for a command (e.g. /replenish help create).",
                 ChatColor.AQUA + "/replenish bind <id-when-mined> <item-drop> <restore-time>" + ChatColor.DARK_AQUA + " - Bind the wand to continuously add Replenish data to blocks.",
+                ChatColor.AQUA + "/replenish unbind" + ChatColor.DARK_AQUA + " - Unbind the Replenish wand.",
                 ChatColor.AQUA + "/replenish create <id-when-mined> <item-drop> <restore-time>" + ChatColor.DARK_AQUA + " - Activate the wand for adding Replenish data to blocks.",
                 ChatColor.AQUA + "/replenish remove" + ChatColor.DARK_AQUA + " - Activate the wand for removing Replenish data from blocks.",
                 ChatColor.AQUA + "/replenish create <listen-id> <id-when-mined> <item-drop> <restore-time> <world-name>" + ChatColor.DARK_AQUA + " - Restore certain blocks in a world according to their ID.",
