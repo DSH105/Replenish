@@ -11,7 +11,7 @@
     <properties>
         <dshutils.version>1.0-SNAPSHOT</dshutils.version>
         <minecraft.version>1.7.2</minecraft.version>
-        <craftbukkit.version>R0.2</craftbukkit.version>
+        <craftbukkit.version>R0.3</craftbukkit.version>
         <cb_package>v1_7_R1</cb_package>
         <main.class>io.github.dsh105.replenish.ReplenishPlugin</main.class>
     </properties>
