@@ -32,7 +32,6 @@
             <groupId>io.github.dsh105</groupId>
             <artifactId>DSHUtils</artifactId>
             <version>${dshutils.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
     <repositories>
