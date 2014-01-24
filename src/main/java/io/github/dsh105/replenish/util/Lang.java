@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public enum Lang {
 
-    PREFIX("prefix", "&6[&eReplenish&6]&r"),
+    PREFIX("prefix", "&7Replenish &r» "),
 
     NO_PERMISSION("no_permission", "&b%perm% &3permission needed to do that."),
     UPDATE_NOT_AVAILABLE("no_permission", "&3An update is not available."),
@@ -22,12 +22,12 @@ public enum Lang {
 
     BLOCK_REMOVED("block_removed", "&3Block data removed (&b%loc%&3)."),
     BLOCK_CREATED("block_created", "&3Block data created (&b%loc%&3)."),
-    BLOCK_NOT_EXISTS("block_not_exists", "&3Block data does not exist for %b%loc%&3."),
+    BLOCK_NOT_EXISTS("block_not_exists", "&3Block data does not exist for &b%loc%&3."),
     BLOCK_EXISTS("block_exists", "&3Block already has data saved (&b%loc%&3). Use &b/replenish remove &3to remove this data."),
 
-    WORLD_REMOVED("block_removed", "&3Block data removed (&b%world%&3)."),
-    WORLD_CREATED("world_created", "&World data created (&b%world%&3)."),
-    WORLD_NOT_EXISTS("world_not_exists", "&3World data does not exist for %b%world%&3."),
+    WORLD_REMOVED("world_removed", "&3World data removed (&b%world%&3)."),
+    WORLD_CREATED("world_created", "&3World data created (&b%world%&3)."),
+    WORLD_NOT_EXISTS("world_not_exists", "&3World data does not exist for &b%world%&3."),
     WORLD_EXISTS("world_exists", "&3World already has data saved (&b%world%&3). Use &b/replenish remove <world_name> &3to remove this data."),
 
     WAND_DEACTIVATED("wand_deactivated", "&3Wand deactivated."),

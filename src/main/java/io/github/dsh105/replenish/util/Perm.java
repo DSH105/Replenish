@@ -7,26 +7,20 @@ import java.util.ArrayList;
 
 public enum Perm {
 
-    UPDATE("replenish.update", "replenish.replenish", "replenish.*"),
-    BUILD("replenish.build", "", "replenish.*"),
-    CREATE("replenish.create", "replenish.replenish", "replenish.*"),
-    REMOVE("replenish.remove", "replenish.replenish", "replenish.*"),
-    BIND("replenish.bind", "replenish.replenish", "replenish.*"),
-    UNBIND("replenish.unbind", "replenish.replenish", "replenish.*"),
-    REMOVE_WORLD("replenish.world.remove", "replenish.replenish", "replenish.*", "replenish.world.*"),
-    CREATE_WORLD("replenish.world.remove", "replenish.replenish", "replenish.*", "replenish.world.*"),
+    UPDATE("replenish.update"),
+    BUILD("replenish.build"),
+    CREATE("replenish.create"),
+    REMOVE("replenish.remove"),
+    BIND("replenish.bind"),
+    UNBIND("replenish.unbind"),
+    REMOVE_WORLD("replenish.world.remove"),
+    CREATE_WORLD("replenish.world.create"),
     ;
 
     String perm;
-    String requiredPerm;
-    ArrayList<String> hierarchy = new ArrayList<String>();
 
-    Perm(String perm, String requiredPerm, String... hierarchy) {
+    Perm(String perm) {
         this.perm = perm;
-        this.requiredPerm = requiredPerm;
-        for (String s : hierarchy) {
-            this.hierarchy.add(s);
-        }
     }
 
     public boolean hasPerm(CommandSender sender, boolean sendMessage, boolean allowConsole) {
@@ -41,19 +35,12 @@ public enum Perm {
     }
 
     public boolean hasPerm(Player player, boolean sendMessage) {
-        boolean hasRequiredPerm = this.requiredPerm.equalsIgnoreCase("") ? true : player.hasPermission(this.requiredPerm);
-        if (!(player.hasPermission(this.perm) && hasRequiredPerm)) {
-            for (String s : this.hierarchy) {
-                if (player.hasPermission(s)) {
-                    return true;
-                }
-            }
-            if (sendMessage) {
-                Lang.sendTo(player, Lang.NO_PERMISSION.toString().replace("%perm%", this.perm));
-            }
-            return false;
-        } else {
+        if (player.hasPermission(this.perm)) {
             return true;
         }
+        if (sendMessage) {
+            Lang.sendTo(player, Lang.NO_PERMISSION.toString().replace("%perm%", this.perm));
+        }
+        return false;
     }
 }
