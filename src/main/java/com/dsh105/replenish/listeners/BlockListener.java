@@ -1,13 +1,13 @@
-package io.github.dsh105.replenish.listeners;
+package com.dsh105.replenish.listeners;
 
 import io.github.dsh105.dshutils.Particle;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.logger.Logger;
 import io.github.dsh105.dshutils.util.EnumUtil;
 import io.github.dsh105.dshutils.util.StringUtil;
-import io.github.dsh105.replenish.util.*;
-import io.github.dsh105.replenish.ReplenishPlugin;
-import io.github.dsh105.replenish.config.ConfigOptions;
+import com.dsh105.replenish.util.*;
+import com.dsh105.replenish.ReplenishPlugin;
+import com.dsh105.replenish.config.ConfigOptions;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

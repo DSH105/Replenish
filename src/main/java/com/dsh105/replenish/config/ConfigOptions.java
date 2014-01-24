@@ -1,4 +1,4 @@
-package io.github.dsh105.replenish.config;
+package com.dsh105.replenish.config;
 
 
 import io.github.dsh105.dshutils.config.YAMLConfig;

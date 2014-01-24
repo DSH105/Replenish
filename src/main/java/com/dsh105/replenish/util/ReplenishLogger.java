@@ -1,4 +1,4 @@
-package io.github.dsh105.replenish.util;
+package com.dsh105.replenish.util;
 
 import io.github.dsh105.dshutils.logger.ConsoleLogger;
 import io.github.dsh105.dshutils.logger.Logger;

@@ -1,4 +1,4 @@
-package io.github.dsh105.replenish;
+package com.dsh105.replenish;
 
 import io.github.dsh105.dshutils.Metrics;
 import io.github.dsh105.dshutils.Updater;
@@ -6,12 +6,12 @@ import io.github.dsh105.dshutils.command.CustomCommand;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.config.YAMLConfigManager;
 import io.github.dsh105.dshutils.logger.Logger;
-import io.github.dsh105.replenish.commands.ReplenishCommand;
-import io.github.dsh105.replenish.config.ConfigOptions;
-import io.github.dsh105.replenish.listeners.BlockListener;
-import io.github.dsh105.replenish.util.InfoStorage;
-import io.github.dsh105.replenish.util.Lang;
-import io.github.dsh105.replenish.util.ReplenishLogger;
+import com.dsh105.replenish.commands.ReplenishCommand;
+import com.dsh105.replenish.config.ConfigOptions;
+import com.dsh105.replenish.listeners.BlockListener;
+import com.dsh105.replenish.util.InfoStorage;
+import com.dsh105.replenish.util.Lang;
+import com.dsh105.replenish.util.ReplenishLogger;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandMap;

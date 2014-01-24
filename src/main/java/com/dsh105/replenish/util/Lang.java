@@ -1,7 +1,7 @@
-package io.github.dsh105.replenish.util;
+package com.dsh105.replenish.util;
 
-import io.github.dsh105.replenish.ReplenishPlugin;
-import io.github.dsh105.replenish.config.ConfigOptions;
+import com.dsh105.replenish.ReplenishPlugin;
+import com.dsh105.replenish.config.ConfigOptions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

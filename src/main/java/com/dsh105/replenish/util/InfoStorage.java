@@ -1,4 +1,4 @@
-package io.github.dsh105.replenish.util;
+package com.dsh105.replenish.util;
 
 public class InfoStorage {
 

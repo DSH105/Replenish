@@ -1,4 +1,4 @@
-package io.github.dsh105.replenish.util;
+package com.dsh105.replenish.util;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -1,13 +1,13 @@
-package io.github.dsh105.replenish.commands;
+package com.dsh105.replenish.commands;
 
 import io.github.dsh105.dshutils.Updater;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.pagination.Paginator;
 import io.github.dsh105.dshutils.util.StringUtil;
-import io.github.dsh105.replenish.util.InfoStorage;
-import io.github.dsh105.replenish.ReplenishPlugin;
-import io.github.dsh105.replenish.util.Lang;
-import io.github.dsh105.replenish.util.Perm;
+import com.dsh105.replenish.util.InfoStorage;
+import com.dsh105.replenish.ReplenishPlugin;
+import com.dsh105.replenish.util.Lang;
+import com.dsh105.replenish.util.Perm;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
