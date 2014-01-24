@@ -58,12 +58,13 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
 
         PluginManager manager = getServer().getPluginManager();
 
-        options = new ConfigOptions(config);
-        dataOptions = new DataConfigOptions(dataConfig);
-
         configManager = new YAMLConfigManager(this);
-        String[] header = {"Replenish By DSH105", "---------------------",
-                "Plugin Requested By Fire_Feather"};
+        String[] header = {
+                "Replenish By DSH105",
+                "---------------------",
+                "Plugin Requested By Fire_Feather",
+                "---------------------",
+        };
         try {
             config = configManager.getNewConfig("config.yml", header);
             config.reloadConfig();
@@ -86,6 +87,8 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.WARNING, "Configuration File [data.yml] generation failed.", e, true);
         }
+
+        options = new ConfigOptions(config);
 
         String[] langHeader = {"Replenish By DSH105", "---------------------",
                 "Language Configuration File"};
