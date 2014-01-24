@@ -1,18 +1,20 @@
 package com.dsh105.replenish;
 
-import io.github.dsh105.dshutils.Metrics;
-import io.github.dsh105.dshutils.Updater;
-import io.github.dsh105.dshutils.command.CustomCommand;
-import io.github.dsh105.dshutils.config.YAMLConfig;
-import io.github.dsh105.dshutils.config.YAMLConfigManager;
-import io.github.dsh105.dshutils.logger.Logger;
 import com.dsh105.replenish.commands.ReplenishCommand;
 import com.dsh105.replenish.config.ConfigOptions;
 import com.dsh105.replenish.listeners.BlockListener;
 import com.dsh105.replenish.util.InfoStorage;
 import com.dsh105.replenish.util.Lang;
 import com.dsh105.replenish.util.ReplenishLogger;
-import org.bukkit.*;
+import io.github.dsh105.dshutils.Metrics;
+import io.github.dsh105.dshutils.Updater;
+import io.github.dsh105.dshutils.command.CustomCommand;
+import io.github.dsh105.dshutils.config.YAMLConfig;
+import io.github.dsh105.dshutils.config.YAMLConfigManager;
+import io.github.dsh105.dshutils.logger.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandMap;
 import org.bukkit.craftbukkit.v1_7_R1.CraftServer;

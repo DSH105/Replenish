@@ -1,13 +1,13 @@
 package com.dsh105.replenish.commands;
 
+import com.dsh105.replenish.ReplenishPlugin;
+import com.dsh105.replenish.util.InfoStorage;
+import com.dsh105.replenish.util.Lang;
+import com.dsh105.replenish.util.Perm;
 import io.github.dsh105.dshutils.Updater;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.pagination.Paginator;
 import io.github.dsh105.dshutils.util.StringUtil;
-import com.dsh105.replenish.util.InfoStorage;
-import com.dsh105.replenish.ReplenishPlugin;
-import com.dsh105.replenish.util.Lang;
-import com.dsh105.replenish.util.Perm;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -42,7 +42,7 @@ public class ReplenishCommand implements CommandExecutor {
     }
 
     private Paginator generateHelp() {
-        String[] s = new String[] {
+        String[] s = new String[]{
                 ChatColor.AQUA + "/replenish help <command>" + ChatColor.DARK_AQUA + " - View help for a command (e.g. /replenish help create).",
                 ChatColor.AQUA + "/replenish bind <id-when-mined> <item-drop> <restore-time>" + ChatColor.DARK_AQUA + " - Bind the wand to continuously add Replenish data to blocks.",
                 ChatColor.AQUA + "/replenish unbind" + ChatColor.DARK_AQUA + " - Unbind the Replenish wand.",
@@ -255,7 +255,7 @@ public class ReplenishCommand implements CommandExecutor {
                 .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : StringUtil.combineSplit(0, args, " "))));
         return true;
     }
-    
+
     public HashMap<String, InfoStorage> getInfoStorage() {
         return ReplenishPlugin.getInstance().infoStorage;
     }

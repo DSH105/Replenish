@@ -35,8 +35,7 @@ public enum Lang {
     WAND_ACTIVE("wand_activate", "&3Wand is already active for that data set."),
     WAND_BOUND("wand_bound", "&3Wand activated and bound. Right click blocks with the wand (" + ConfigOptions.instance.getConfig().getInt("wand") + ") to add the data."),
     WAND_UNBOUND("wand_unbound", "&3Wand unbound."),
-    WAND_NOT_BOUND("wand_not_bound", "&3Wand is not currently bound."),
-    ;
+    WAND_NOT_BOUND("wand_not_bound", "&3Wand is not currently bound."),;
 
     private String path;
     private String def;

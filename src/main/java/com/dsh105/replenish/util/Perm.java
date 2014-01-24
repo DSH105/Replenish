@@ -3,8 +3,6 @@ package com.dsh105.replenish.util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-
 public enum Perm {
 
     UPDATE("replenish.update"),
@@ -14,8 +12,7 @@ public enum Perm {
     BIND("replenish.bind"),
     UNBIND("replenish.unbind"),
     REMOVE_WORLD("replenish.world.remove"),
-    CREATE_WORLD("replenish.world.create"),
-    ;
+    CREATE_WORLD("replenish.world.create"),;
 
     String perm;
 
