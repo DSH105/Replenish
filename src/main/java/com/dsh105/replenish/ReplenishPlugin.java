@@ -156,7 +156,7 @@ public class ReplenishPlugin extends JavaPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
-                    Updater updater = new Updater(instance, 53655, file, updateType, false);
+                    Updater updater = new Updater(instance, 51750, file, updateType, false);
                     update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (update) {
                         name = updater.getLatestName();
