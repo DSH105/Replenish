@@ -23,6 +23,19 @@ public class ReplenishCommand implements CommandExecutor {
     public String cmdLabel;
     public Paginator help;
 
+    private static String[] CREATE_HELP = new String[]{
+            ChatColor.AQUA + "/replenish create <id-when-mined> <item-drop> <restore-time>",
+            ChatColor.DARK_AQUA + "- Mined ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will change to when it is mined by a player.",
+            ChatColor.DARK_AQUA + "- Item Drop " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will drop when it is mined.",
+            ChatColor.DARK_AQUA + "- Restore Time " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): Length of time (in seconds) the block takes to restore back to its original state.",
+            ChatColor.AQUA + "/replenish create <listen-id> <id-when-mined> <item-drop> <restore-time> <world>",
+            ChatColor.DARK_AQUA + "- Listen ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): ID of a block to listen to in a specific world. Entering " + ChatColor.AQUA + "ALL" + ChatColor.DARK_AQUA + " will replenish all broken blocks",
+            ChatColor.DARK_AQUA + "- Mined ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will change to when it is mined by a player.",
+            ChatColor.DARK_AQUA + "- Item Drop " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will drop when it is mined.",
+            ChatColor.DARK_AQUA + "- Restore Time " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): Length of time (in seconds) the block takes to restore back to its original state.",
+            ChatColor.DARK_AQUA + "- World Name " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "String" + ChatColor.DARK_AQUA + "): World affected by the Replenish data."
+    };
+
     public ReplenishCommand(String cmdLabel) {
         this.cmdLabel = cmdLabel;
         this.help = this.generateHelp();
@@ -46,12 +59,12 @@ public class ReplenishCommand implements CommandExecutor {
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
                 String[] help = this.help.getPage(1);
-                sender.sendMessage(ChatColor.DARK_AQUA + "--------------------" + ChatColor.AQUA + " Replenish Help 1/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "--------------------");
+                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help 1/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
                 sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
                 for (String s : help) {
                     sender.sendMessage(s);
                 }
-                sender.sendMessage(ChatColor.DARK_AQUA + "------------------------------------------------------------");
+                sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                 return true;
             } else if (args.length == 2) {
                 if (StringUtil.isInt(args[1])) {
@@ -60,25 +73,18 @@ public class ReplenishCommand implements CommandExecutor {
                         Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
                         return true;
                     }
-                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------" + ChatColor.AQUA + " Replenish Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "--------------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
                     for (String s : help) {
                         sender.sendMessage(s);
                     }
-                    sender.sendMessage(ChatColor.DARK_AQUA + "------------------------------------------------------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                     return true;
                 } else {
-                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------" + ChatColor.AQUA + " Replenish Help " + ChatColor.DARK_AQUA + "--------------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help " + ChatColor.DARK_AQUA + "----------------");
                     if (args[1].equalsIgnoreCase("create")) {
-                        sender.sendMessage(ChatColor.AQUA + "/replenish create <id-when-mined> <item-drop> <restore-time>");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Mined ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will change to when it is mined by a player.");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Item Drop " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will drop when it is mined.");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Restore Time " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): Length of time (in seconds) the block takes to restore back to its original state.");
-                        sender.sendMessage(ChatColor.AQUA + "/replenish create <listen-id> <id-when-mined> <item-drop> <restore-time> <world>");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Listen ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): ID of a block to listen to in a specific world. Entering" + ChatColor.AQUA + "ALL" + ChatColor.DARK_AQUA + "will replenish all broken blocks");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Mined ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will change to when it is mined by a player.");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Item Drop " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will drop when it is mined.");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- Restore Time " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): Length of time (in seconds) the block takes to restore back to its original state.");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "- World Name " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "String" + ChatColor.DARK_AQUA + "): World affected by the Replenish data.");
+                        for (String s : CREATE_HELP) {
+                            sender.sendMessage(s);
+                        }
                     } else if (args[1].equalsIgnoreCase("remove")) {
                         sender.sendMessage(ChatColor.AQUA + "/replenish remove" + ChatColor.DARK_AQUA);
                         sender.sendMessage(ChatColor.AQUA + "/replenish remove <world>" + ChatColor.DARK_AQUA);
@@ -90,7 +96,7 @@ public class ReplenishCommand implements CommandExecutor {
                     } else {
                         sender.sendMessage(ChatColor.DARK_AQUA + "Help could not be found for \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\".");
                     }
-                    sender.sendMessage(ChatColor.DARK_AQUA + "------------------------------------------------------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                     return true;
                 }
             }
@@ -103,7 +109,11 @@ public class ReplenishCommand implements CommandExecutor {
                         if (!this.getInfoStorage().get(p.getName()).getInfo().equals("remove")) {
                             this.getInfoStorage().remove(p.getName());
                             Lang.sendTo(sender, Lang.WAND_DEACTIVATED.toString());
+                            return true;
                         }
+                    }
+                    for (String s : CREATE_HELP) {
+                        sender.sendMessage(s);
                     }
                     return true;
                 } else return true;
@@ -137,7 +147,7 @@ public class ReplenishCommand implements CommandExecutor {
                 if (Perm.UPDATE.hasPerm(sender, true, true)) {
                     if (ReplenishPlugin.getInstance().updateChecked) {
                         @SuppressWarnings("unused")
-                        Updater updater = new Updater(ReplenishPlugin.getInstance(), 53655, ReplenishPlugin.getInstance().getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+                        Updater updater = new Updater(ReplenishPlugin.getInstance(), 53655, ReplenishPlugin.getInstance().file(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     } else {
                         Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.toString());
                     }
@@ -148,16 +158,9 @@ public class ReplenishCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("help")) {
                 sender.sendMessage(ChatColor.DARK_AQUA + "--------------------" + ChatColor.AQUA + " Replenish Help " + ChatColor.DARK_AQUA + "--------------------");
                 if (args[1].equalsIgnoreCase("create")) {
-                    sender.sendMessage(ChatColor.AQUA + "/replenish create <id-when-mined> <item-drop> <restore-time>");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Mined ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will change to when it is mined by a player.");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Item Drop " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will drop when it is mined.");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Restore Time " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): Length of time (in seconds) the block takes to restore back to its original state.");
-                    sender.sendMessage(ChatColor.AQUA + "/replenish create <listen-id> <id-when-mined> <item-drop> <restore-time> <world>");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Listen ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): ID of a block to listen to in a specific world. Entering" + ChatColor.AQUA + "ALL" + ChatColor.DARK_AQUA + "will replenish all broken blocks");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Mined ID " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will change to when it is mined by a player.");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Item Drop " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): The ID the block will drop when it is mined.");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- Restore Time " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "Integer" + ChatColor.DARK_AQUA + "): Length of time (in seconds) the block takes to restore back to its original state.");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "- World Name " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "String" + ChatColor.DARK_AQUA + "): World affected by the Replenish data.");
+                    for (String s : CREATE_HELP) {
+                        sender.sendMessage(s);
+                    }
                 } else if (args[1].equalsIgnoreCase("remove")) {
                     sender.sendMessage(ChatColor.AQUA + "/replenish remove" + ChatColor.DARK_AQUA);
                     sender.sendMessage(ChatColor.AQUA + "/replenish remove <world>" + ChatColor.DARK_AQUA);
@@ -196,16 +199,10 @@ public class ReplenishCommand implements CommandExecutor {
                     Player p = (Player) sender;
                     String s = "";
                     for (int i = 1; i <= 3; i++) {
-                        if (i == 2 && args[i].contains("stack:")) {
-                            if (StringUtil.isInt(args[i].split(":")[1])) {
-                                s = (s == "" || s == null) ? "" + i : ":" + i;
-                            } else {
-                                Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
-                                return true;
-                            }
-                        }
-                        if (StringUtil.isInt(args[i])) {
-                            s = (s == "" || s == null) ? "" + i : ":" + i;
+                        if (i == 2 && args[i].contains("id;")) {
+                            s = s + ((s == "" || s == null) ? "id;" + args[i].split(";")[1] : ":id;" + args[i].split(";")[1]);
+                        } else if (StringUtil.isInt(args[i])) {
+                            s = s + ((s == "" || s == null) ? "" + args[i] : ":" + args[i]);
                         } else {
                             Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
                             return true;
@@ -225,16 +222,11 @@ public class ReplenishCommand implements CommandExecutor {
                 if (Perm.CREATE_WORLD.hasPerm(sender, true, true)) {
                     String s = "";
                     for (int i = 1; i <= 4; i++) {
-                        if (i == 2 && args[i].contains("stack:")) {
-                            if (StringUtil.isInt(args[i].split(":")[1])) {
-                                s = (s == "" || s == null) ? "" + i : ":" + i;
-                            } else {
-                                Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
-                                return true;
-                            }
-                        }
-                        if (StringUtil.isInt(args[i])) {
-                            s = (s == "" || s == null) ? "" + i : ":" + i;
+                        // Find saved stack by id
+                        if (i == 3 && args[i].contains("id;")) {
+                            s = s + ((s == "" || s == null) ? "id;" + args[i].split(";")[1] : ":id;" + args[i].split(";")[1]);
+                        } else if (StringUtil.isInt(args[i])) {
+                            s = s + ((s == "" || s == null) ? "" + args[i] : ":" + args[i]);
                         } else if (i == 1 && args[i].equalsIgnoreCase("all")) {
                             s = args[i].toLowerCase();
                         } else {
@@ -242,11 +234,11 @@ public class ReplenishCommand implements CommandExecutor {
                             return true;
                         }
                     }
-                    if (Bukkit.getWorld(args[5]) == null) {
+                    World world = Bukkit.getWorld(args[5]);
+                    if (world == null) {
                         Lang.sendTo(sender, Lang.INVALID_WORLD.toString().replace("%world%", args[5]));
                         return true;
                     }
-                    World world = Bukkit.getWorld(args[4]);
                     YAMLConfig c = ReplenishPlugin.getInstance().getConfig(ReplenishPlugin.ConfigType.DATA);
                     if (c.get("worlds." + world.getName()) == null) {
                         c.set("worlds." + world.getName(), s);

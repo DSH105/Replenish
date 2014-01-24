@@ -5,19 +5,17 @@ import io.github.dsh105.dshutils.Updater;
 import io.github.dsh105.dshutils.command.CustomCommand;
 import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.config.YAMLConfigManager;
-import io.github.dsh105.dshutils.logger.ConsoleLogger;
 import io.github.dsh105.dshutils.logger.Logger;
 import io.github.dsh105.replenish.commands.ReplenishCommand;
 import io.github.dsh105.replenish.config.ConfigOptions;
-import io.github.dsh105.replenish.config.DataConfigOptions;
 import io.github.dsh105.replenish.listeners.BlockListener;
 import io.github.dsh105.replenish.util.InfoStorage;
 import io.github.dsh105.replenish.util.Lang;
+import io.github.dsh105.replenish.util.ReplenishLogger;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandMap;
 import org.bukkit.craftbukkit.v1_7_R1.CraftServer;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,7 +25,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class ReplenishPlugin extends JavaPlugin implements Listener {
+public class ReplenishPlugin extends JavaPlugin {
 
     private static ReplenishPlugin instance;
     private YAMLConfigManager configManager;
@@ -35,7 +33,6 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
     private ConfigOptions options;
-    private DataConfigOptions dataOptions;
 
     // Update data
     public boolean update = false;
@@ -54,7 +51,7 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
         Logger.initiate(this, "Replenish", "[Replenish]");
-        ConsoleLogger.initiate(this);
+        ReplenishLogger.initiate(this);
 
         PluginManager manager = getServer().getPluginManager();
 
@@ -112,6 +109,7 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
             Logger.log(Logger.LogLevel.WARNING, "Configuration File [lang.yml] generation failed.", e, true);
         }
 
+
         this.prefix = Lang.PREFIX.toString();
 
         CustomCommand.initiate(this);
@@ -125,17 +123,19 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
             Logger.log(Logger.LogLevel.WARNING, "Registration of command failed.", e, true);
         }
 
-        String cmdString = options.getConfig().getString("command-string");
+        String cmdString = options.getConfig().getString("commandString");
         if (CM.getCommand(cmdString) != null) {
-            ConsoleLogger.log(Logger.LogLevel.WARNING, "A command under the name " + ChatColor.RED + "/" + cmdString + ChatColor.YELLOW + " already exists. Command temporarily registered under " + ChatColor.RED + "/r:" + cmdString);
+            ReplenishLogger.log(Logger.LogLevel.WARNING, "A command under the name " + ChatColor.RED + "/" + cmdString + ChatColor.YELLOW + " already exists. Command temporarily registered under " + ChatColor.RED + "/r:" + cmdString);
         }
         CustomCommand cmd = new CustomCommand(cmdString);
         CM.register("r", cmd);
         cmd.setExecutor(new ReplenishCommand(cmdString));
+        cmd.setDescription("Create blocks that automagically restore themselves and drop custom items.");
+        cmd.setPermission("replenish.replenish");
         //cmd.setTabCompleter(new CommandComplete());
         this.cmdString = cmdString;
 
-        manager.registerEvents(this, this);
+        manager.registerEvents(new BlockListener(), this);
 
         try {
             Metrics metrics = new Metrics(this);
@@ -158,8 +158,8 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
                     update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (update) {
                         name = updater.getLatestName();
-                        ConsoleLogger.log(ChatColor.GOLD + "An update is available: " + name);
-                        ConsoleLogger.log(ChatColor.GOLD + "Type /replenish update to update.");
+                        ReplenishLogger.log(ChatColor.GOLD + "An update is available: " + name);
+                        ReplenishLogger.log(ChatColor.GOLD + "Type /replenish update to update.");
                         if (!updateChecked) {
                             updateChecked = true;
                         }
@@ -178,7 +178,7 @@ public class ReplenishPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    public File getFile() {
+    public File file() {
         return this.getFile();
     }
 

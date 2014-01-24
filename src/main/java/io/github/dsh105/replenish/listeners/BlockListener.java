@@ -5,15 +5,13 @@ import io.github.dsh105.dshutils.config.YAMLConfig;
 import io.github.dsh105.dshutils.logger.Logger;
 import io.github.dsh105.dshutils.util.EnumUtil;
 import io.github.dsh105.dshutils.util.StringUtil;
-import io.github.dsh105.replenish.util.InfoStorage;
+import io.github.dsh105.replenish.util.*;
 import io.github.dsh105.replenish.ReplenishPlugin;
 import io.github.dsh105.replenish.config.ConfigOptions;
-import io.github.dsh105.replenish.config.DataConfigOptions;
-import io.github.dsh105.replenish.util.Lang;
-import io.github.dsh105.replenish.util.Perm;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,7 +31,7 @@ public class BlockListener implements Listener {
     }
 
     private HashMap<Location, Integer> restoreProcess = new HashMap<Location, Integer>();
-    YAMLConfig dataConfig = DataConfigOptions.instance.getConfig();
+    YAMLConfig dataConfig = ReplenishPlugin.getInstance().getConfig(ReplenishPlugin.ConfigType.DATA);
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -49,17 +47,20 @@ public class BlockListener implements Listener {
                     World world = targetBlock.getWorld();
                     Location loc = new Location(world, targetBlockX, targetBlockY, targetBlockZ);
                     String sLoc = serialiseLocation(loc);
-                    for (String key : this.dataConfig.getConfigurationSection("blocks").getKeys(false)) {
-                        if (key != null) {
-                            if (sLoc.equals(key)) {
-                                this.dataConfig.set("blocks." + sLoc, null);
-                                this.dataConfig.saveConfig();
-                                Lang.sendTo(player, Lang.BLOCK_REMOVED.toString().replace("%loc", sLoc.replace(":", ", ")));
-                                if (!i.isBound()) {
-                                    this.getInfoStorage().remove(player.getName());
-                                }
-                                if (restoreProcess.containsKey(loc)) {
-                                    targetBlock.setTypeId(restoreProcess.get(loc));
+                    ConfigurationSection blockSection = this.dataConfig.getConfigurationSection("blocks");
+                    if (blockSection != null) {
+                        for (String key : blockSection.getKeys(false)) {
+                            if (key != null) {
+                                if (sLoc.equals(key)) {
+                                    this.dataConfig.set("blocks." + sLoc, null);
+                                    this.dataConfig.saveConfig();
+                                    Lang.sendTo(player, Lang.BLOCK_REMOVED.toString().replace("%loc%", sLoc.replace(":", ", ")));
+                                    if (!i.isBound()) {
+                                        this.getInfoStorage().remove(player.getName());
+                                    }
+                                    if (restoreProcess.containsKey(loc)) {
+                                        targetBlock.setTypeId(restoreProcess.get(loc));
+                                    }
                                 }
                             }
                         }
@@ -76,7 +77,7 @@ public class BlockListener implements Listener {
                     if (this.dataConfig.get(sLoc) == null) {
                         this.dataConfig.set("blocks." + sLoc, i.getInfo());
                         this.dataConfig.saveConfig();
-                        Lang.sendTo(player, Lang.BLOCK_REMOVED.toString().replace("%loc", sLoc.replace(":", ", ")));
+                        Lang.sendTo(player, Lang.BLOCK_CREATED.toString().replace("%loc%", sLoc.replace(":", ", ")));
                         if (!i.isBound()) {
                             this.getInfoStorage().remove(player.getName());
                         }
@@ -91,46 +92,59 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
+        if (!ConfigOptions.instance.getConfig().getBoolean("allowBlockBreak", false)) {
+            if (!Perm.BUILD.hasPerm(player, false, false)) {
+                event.setCancelled(true);
+            }
+        }
+        if (player.getItemInHand().getTypeId() == ConfigOptions.instance.getConfig().getInt("wand")) {
+            return;
+        }
         Block targetBlock = event.getBlock();
         Location loc = targetBlock.getLocation();
         String sLoc = serialiseLocation(loc);
-        for (String key : this.dataConfig.getConfigurationSection("blocks").getKeys(false)) {
-            if (key != null) {
-                if (sLoc.equals(key)) {
-                    if (!(restoreProcess.containsKey(loc))) {
-                        String blockData = this.dataConfig.getString("blocks." + key);
-                        String[] split = blockData.split(":");
-                        event.setCancelled(true);
-                        this.replenish(player, targetBlock, Integer.parseInt(split[0]), split[1], Integer.parseInt(split[2]));
-                    }
-                }
-            }
-        }
-        for (String key : this.dataConfig.getConfigurationSection("worlds").getKeys(false)) {
-            if (key != null) {
-                if (loc.getWorld().getName().equals(key)) {
-                    if (!(restoreProcess.containsKey(loc))) {
-                        String blockData = this.dataConfig.getString("worlds." + key);
-                        String[] split = blockData.split(":");
-                        int listenId;
-                        if (split[0].equalsIgnoreCase("all")) {
-                            listenId = -1;
-                        } else {
-                            listenId = Integer.parseInt(split[0]);
-                        }
-                        if (listenId == -1 || targetBlock.getTypeId() == listenId) {
+        ConfigurationSection blockSection = this.dataConfig.getConfigurationSection("blocks");
+        if (blockSection != null) {
+            for (String key : blockSection.getKeys(false)) {
+                if (key != null) {
+                    if (sLoc.equals(key)) {
+                        if (!(restoreProcess.containsKey(loc))) {
+                            String blockData = this.dataConfig.getString("blocks." + key);
+                            String[] split = blockData.split(":");
                             event.setCancelled(true);
                             this.replenish(player, targetBlock, Integer.parseInt(split[0]), split[1], Integer.parseInt(split[2]));
+                        } else {
+                            event.setCancelled(true);
                         }
                     }
                 }
             }
         }
 
-        if (!ConfigOptions.instance.getConfig().getBoolean("allowBlockBreak", false)) {
-            if (!Perm.BUILD.hasPerm(player, false, false)) {
-                if (!event.isCancelled()) {
-                    event.setCancelled(true);
+        ConfigurationSection worldSection = this.dataConfig.getConfigurationSection("worlds");
+        if (worldSection != null) {
+            for (String key : worldSection.getKeys(false)) {
+                if (key != null) {
+                    if (loc.getWorld().getName().equals(key)) {
+                        if (!(restoreProcess.containsKey(loc))) {
+                            String blockData = this.dataConfig.getString("worlds." + key);
+                            String[] split = blockData.split(":");
+                            int listenId;
+                            if (split[0].equalsIgnoreCase("all")) {
+                                // Means all blocks in the world will be replenished
+                                listenId = -1;
+                            } else {
+                                // Otherwise, only listen in on this id
+                                listenId = Integer.parseInt(split[0]);
+                            }
+                            if (listenId == -1 || targetBlock.getTypeId() == listenId) {
+                                event.setCancelled(true);
+                                this.replenish(player, targetBlock, Integer.parseInt(split[1]), split[2], Integer.parseInt(split[3]));
+                            }
+                        } else {
+                            event.setCancelled(true);
+                        }
+                    }
                 }
             }
         }
@@ -140,21 +154,26 @@ public class BlockListener implements Listener {
         Location l = targetBlock.getLocation();
         int dropChance = ConfigOptions.instance.getConfig().getInt("drop.chance", 100);
         if (StringUtil.r().nextInt(99) < dropChance) {
-            int minAmount = ConfigOptions.instance.getConfig().getInt("drop.min-quantity", 1);
-            int maxAmount = ConfigOptions.instance.getConfig().getInt("drop.max-quantity", 3);
-            int i = StringUtil.r().nextInt(maxAmount - minAmount);
+            int minAmount = ConfigOptions.instance.getConfig().getInt("drop.minQuantity", 1);
+            int maxAmount = ConfigOptions.instance.getConfig().getInt("drop.maxQuantity", 3);
+            int i = StringUtil.r().nextInt(maxAmount - minAmount + 1);
             if (StringUtil.r().nextInt(3) > 0) {
                 i /= 2;
             }
+            int dropAmount = minAmount + i;
 
             ItemStack itemStack = null;
-            if (drop.contains("stack:")) {
-                int id = Integer.parseInt(drop.split(":")[1]);
-                DataConfigOptions.instance.getStack(id, targetBlock.getTypeId(), minAmount + i);
+            if (drop.contains("id;")) {
+                String id = drop.split(";")[1];
+                itemStack = ConfigOptions.instance.getSavedStack(id, targetBlock.getTypeId(), dropAmount);
+                if (itemStack == null) {
+                    ReplenishLogger.logSavedStack(id);
+                    return;
+                }
             }
 
             if (itemStack == null) {
-                itemStack = new ItemStack(Integer.parseInt(drop), minAmount + i);
+                itemStack = new ItemStack(Integer.parseInt(drop), dropAmount);
             }
             l.getWorld().dropItemNaturally(l, itemStack);
         }
@@ -200,9 +219,9 @@ public class BlockListener implements Listener {
 
     private void playEffect(Player player, Location l) {
         if (ConfigOptions.instance.getConfig().getBoolean("effect.play", true)) {
-            boolean playerOnly = ConfigOptions.instance.getConfig().getBoolean("effect.seen.miner-only", false);
-            if (ConfigOptions.instance.getConfig().getBoolean("effect.perm.use", false)) {
-                if (!player.hasPermission(ConfigOptions.instance.getConfig().getString("effect.perm.perm", "replenish.effect"))) {
+            boolean playerOnly = ConfigOptions.instance.getConfig().getBoolean("effect.onlyMinerCanSee", false);
+            if (ConfigOptions.instance.getConfig().getBoolean("effect.permissionRestricted", false)) {
+                if (!player.hasPermission("replenish.effect")) {
                     return;
                 }
             }
