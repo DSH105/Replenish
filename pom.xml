@@ -103,7 +103,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>io.github.dsh105.dshutils</pattern>
-                                    <shadedPattern>io.github.dsh105.replenish.libs.dshutils</shadedPattern>
+                                    <shadedPattern>com.dsh105.replenish.libs.dshutils</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
