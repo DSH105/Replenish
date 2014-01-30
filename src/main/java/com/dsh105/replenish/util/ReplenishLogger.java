@@ -1,7 +1,7 @@
 package com.dsh105.replenish.util;
 
-import io.github.dsh105.dshutils.logger.ConsoleLogger;
-import io.github.dsh105.dshutils.logger.Logger;
+import com.dsh105.dshutils.logger.ConsoleLogger;
+import com.dsh105.dshutils.logger.Logger;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,9 @@
 package com.dsh105.replenish.config;
 
 
-import io.github.dsh105.dshutils.config.YAMLConfig;
-import io.github.dsh105.dshutils.config.options.Options;
-import io.github.dsh105.dshutils.util.StringUtil;
+import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.config.options.Options;
+import com.dsh105.dshutils.util.StringUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
