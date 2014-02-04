@@ -236,14 +236,10 @@ public class BlockListener implements Listener {
                 p = Particle.FIRE;
             }
 
-            try {
-                if (playerOnly) {
-                    p.sendToPlayer(l, player);
-                } else {
-                    p.sendTo(l);
-                }
-            } catch (Exception e) {
-                Logger.log(Logger.LogLevel.NORMAL, "Failed to fabricate particle effect", true);
+            if (playerOnly) {
+                p.sendToPlayer(l, player);
+            } else {
+                p.sendTo(l);
             }
         }
     }
