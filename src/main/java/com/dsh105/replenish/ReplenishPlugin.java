@@ -1,5 +1,6 @@
 package com.dsh105.replenish;
 
+import com.dsh105.dshutils.DSHPlugin;
 import com.dsh105.replenish.commands.ReplenishCommand;
 import com.dsh105.replenish.config.ConfigOptions;
 import com.dsh105.replenish.listeners.BlockListener;
@@ -27,10 +28,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class ReplenishPlugin extends JavaPlugin {
+public class ReplenishPlugin extends DSHPlugin {
 
-    private static ReplenishPlugin instance;
-    private YAMLConfigManager configManager;
     private YAMLConfig config;
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
@@ -51,13 +50,11 @@ public class ReplenishPlugin extends JavaPlugin {
     public HashMap<String, InfoStorage> infoStorage = new HashMap<String, InfoStorage>();
 
     public void onEnable() {
-        instance = this;
+        super.onEnable();
         Logger.initiate(this, "Replenish", "[Replenish]");
-        ReplenishLogger.initiate(this);
 
         PluginManager manager = getServer().getPluginManager();
 
-        configManager = new YAMLConfigManager(this);
         String[] header = {
                 "Replenish By DSH105",
                 "---------------------",
@@ -65,7 +62,7 @@ public class ReplenishPlugin extends JavaPlugin {
                 "---------------------",
         };
         try {
-            config = configManager.getNewConfig("config.yml", header);
+            config = this.getConfigManager().getNewConfig("config.yml", header);
             config.reloadConfig();
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.WARNING, "Configuration File [config.yml] generation failed.", e, true);
@@ -81,7 +78,7 @@ public class ReplenishPlugin extends JavaPlugin {
         }
 
         try {
-            dataConfig = configManager.getNewConfig("data.yml");
+            dataConfig = this.getConfigManager().getNewConfig("data.yml");
             dataConfig.reloadConfig();
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.WARNING, "Configuration File [data.yml] generation failed.", e, true);
@@ -92,7 +89,7 @@ public class ReplenishPlugin extends JavaPlugin {
         String[] langHeader = {"Replenish By DSH105", "---------------------",
                 "Language Configuration File"};
         try {
-            langConfig = configManager.getNewConfig("lang.yml", langHeader);
+            langConfig = this.getConfigManager().getNewConfig("lang.yml", langHeader);
             try {
                 for (Lang l : Lang.values()) {
                     String[] desc = l.getDescription();
@@ -114,7 +111,6 @@ public class ReplenishPlugin extends JavaPlugin {
 
         this.prefix = Lang.PREFIX.toString();
 
-        CustomCommand.initiate(this);
         try {
             if (Bukkit.getServer() instanceof CraftServer) {
                 final Field f = CraftServer.class.getDeclaredField("commandMap");
@@ -156,7 +152,7 @@ public class ReplenishPlugin extends JavaPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
-                    Updater updater = new Updater(instance, 51750, file, updateType, false);
+                    Updater updater = new Updater(getInstance(), 51750, file, updateType, false);
                     update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (update) {
                         name = updater.getLatestName();
@@ -172,6 +168,7 @@ public class ReplenishPlugin extends JavaPlugin {
     }
 
     public void onDisable() {
+        super.onDisable();
         for (Entry<Location, Integer> entry : BlockListener.getInstance().getRestoreProcesStorage().entrySet()) {
             Location loc = entry.getKey();
             int blockTypeId = entry.getValue();
@@ -196,7 +193,7 @@ public class ReplenishPlugin extends JavaPlugin {
     }
 
     public static ReplenishPlugin getInstance() {
-        return instance;
+        return (ReplenishPlugin) getPluginInstance();
     }
 
     public static enum ConfigType {
