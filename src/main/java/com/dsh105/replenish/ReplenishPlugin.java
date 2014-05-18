@@ -2,6 +2,8 @@ package com.dsh105.replenish;
 
 import com.dsh105.dshutils.DSHPlugin;
 import com.dsh105.replenish.commands.ReplenishCommand;
+import com.dsh105.replenish.commands.util.CommandManager;
+import com.dsh105.replenish.commands.util.DynamicPluginCommand;
 import com.dsh105.replenish.config.ConfigOptions;
 import com.dsh105.replenish.listeners.BlockListener;
 import com.dsh105.replenish.util.InfoStorage;
@@ -9,22 +11,15 @@ import com.dsh105.replenish.util.Lang;
 import com.dsh105.replenish.util.ReplenishLogger;
 import com.dsh105.dshutils.Metrics;
 import com.dsh105.dshutils.Updater;
-import com.dsh105.dshutils.command.CustomCommand;
 import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.config.YAMLConfigManager;
 import com.dsh105.dshutils.logger.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandMap;
-import org.bukkit.craftbukkit.v1_7_R1.CraftServer;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -44,14 +39,16 @@ public class ReplenishPlugin extends DSHPlugin {
     public ChatColor primaryColour = ChatColor.GREEN;
     public ChatColor secondaryColour = ChatColor.YELLOW;
     public String prefix = ChatColor.GOLD + "[" + ChatColor.YELLOW + "Replenish" + ChatColor.GOLD + "] " + ChatColor.RESET;
-    public CommandMap CM;
     public String cmdString = "replenish";
 
     public HashMap<String, InfoStorage> infoStorage = new HashMap<String, InfoStorage>();
+    private CommandManager COMMAND_MANAGER;
 
     public void onEnable() {
         super.onEnable();
         Logger.initiate(this, "Replenish", "[Replenish]");
+
+        COMMAND_MANAGER = new CommandManager(this);
 
         PluginManager manager = getServer().getPluginManager();
 
@@ -111,27 +108,9 @@ public class ReplenishPlugin extends DSHPlugin {
 
         this.prefix = Lang.PREFIX.toString();
 
-        try {
-            if (Bukkit.getServer() instanceof CraftServer) {
-                final Field f = CraftServer.class.getDeclaredField("commandMap");
-                f.setAccessible(true);
-                CM = (CommandMap) f.get(Bukkit.getServer());
-            }
-        } catch (Exception e) {
-            Logger.log(Logger.LogLevel.WARNING, "Registration of command failed.", e, true);
-        }
-
-        String cmdString = options.getConfig().getString("commandString");
-        if (CM.getCommand(cmdString) != null) {
-            ReplenishLogger.log(Logger.LogLevel.WARNING, "A command under the name " + ChatColor.RED + "/" + cmdString + ChatColor.YELLOW + " already exists. Command temporarily registered under " + ChatColor.RED + "/r:" + cmdString);
-        }
-        CustomCommand cmd = new CustomCommand(cmdString);
-        CM.register("r", cmd);
-        cmd.setExecutor(new ReplenishCommand(cmdString));
-        cmd.setDescription("Create blocks that automagically restore themselves and drop custom items.");
-        cmd.setPermission("replenish.replenish");
-        //cmd.setTabCompleter(new CommandComplete());
-        this.cmdString = cmdString;
+        DynamicPluginCommand petCmd = new DynamicPluginCommand(this.cmdString, new String[0], "Create blocks that automagically restore themselves and drop custom items.", "Use /" + this.cmdString + " help to see the command list.", new ReplenishCommand(this.cmdString), null, this);
+        petCmd.setPermission("replenish.replenish");
+        COMMAND_MANAGER.register(petCmd);
 
         manager.registerEvents(new BlockListener(), this);
 
@@ -168,13 +147,13 @@ public class ReplenishPlugin extends DSHPlugin {
     }
 
     public void onDisable() {
-        super.onDisable();
         for (Entry<Location, Integer> entry : BlockListener.getInstance().getRestoreProcesStorage().entrySet()) {
             Location loc = entry.getKey();
             int blockTypeId = entry.getValue();
             Block block = loc.getBlock();
             block.setTypeId(blockTypeId);
         }
+        super.onDisable();
     }
 
     public File file() {
