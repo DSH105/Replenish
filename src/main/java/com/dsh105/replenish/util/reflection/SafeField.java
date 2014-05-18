@@ -17,8 +17,9 @@
 
 package com.dsh105.replenish.util.reflection;
 
-
-import com.dsh105.echopet.compat.api.plugin.EchoPet;
+import com.dsh105.dshutils.logger.Logger;
+import com.dsh105.replenish.ReplenishPlugin;
+import com.dsh105.replenish.util.ReplenishLogger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -37,7 +38,7 @@ public class SafeField<T> implements FieldAccessor<T> {
             Field field = coreClass.getDeclaredField(fieldName);
             setField(field);
         } catch (NoSuchFieldException e) {
-            EchoPet.getPlugin().getReflectionLogger().warning("Failed to find a matching field with name: " + fieldName);
+            ReplenishLogger.log(Logger.LogLevel.WARNING, "Failed to find a matching field with name: " + fieldName);
             e.printStackTrace();
         }
     }
@@ -70,7 +71,7 @@ public class SafeField<T> implements FieldAccessor<T> {
             this.field.set(instance, value);
             return true;
         } catch (IllegalAccessException e) {
-            EchoPet.getPlugin().getReflectionLogger().warning("Failed to access field: " + toString());
+            ReplenishLogger.log(Logger.LogLevel.WARNING, "Failed to access field: " + toString());
             e.printStackTrace();
         }
         return false;
@@ -84,7 +85,7 @@ public class SafeField<T> implements FieldAccessor<T> {
         try {
             return (T) this.field.get(instance);
         } catch (IllegalAccessException e) {
-            EchoPet.getPlugin().getReflectionLogger().warning("Failed to access field: " + toString());
+            ReplenishLogger.log(Logger.LogLevel.WARNING, "Failed to access field: " + toString());
             e.printStackTrace();
         }
         return null;
