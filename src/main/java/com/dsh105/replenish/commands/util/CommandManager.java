@@ -17,9 +17,9 @@
 
 package com.dsh105.replenish.commands.util;
 
-import com.dsh105.echopet.compat.api.plugin.EchoPet;
-import com.dsh105.echopet.compat.api.reflection.FieldAccessor;
-import com.dsh105.echopet.compat.api.reflection.SafeField;
+import com.dsh105.replenish.ReplenishPlugin;
+import com.dsh105.replenish.util.reflection.FieldAccessor;
+import com.dsh105.replenish.util.reflection.SafeField;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -87,14 +87,14 @@ public class CommandManager {
                 if (fallback != null) {
                     return fallback;
                 } else {
-                    fallback = map = new SimpleCommandMap(EchoPet.getPlugin().getServer());
+                    fallback = map = new SimpleCommandMap(ReplenishPlugin.getInstance().getServer());
                     Bukkit.getPluginManager().registerEvents(new FallbackCommandRegistrationListener(fallback), this.plugin);
                 }
             }
         } catch (Exception pie) {
             this.plugin.getLogger().warning("Failed to dynamically register the commands! Let's give it a last shot...");
             // Hmmm.... Pie...
-            fallback = map = new SimpleCommandMap(EchoPet.getPlugin().getServer());
+            fallback = map = new SimpleCommandMap(ReplenishPlugin.getInstance().getServer());
             Bukkit.getPluginManager().registerEvents(new FallbackCommandRegistrationListener(fallback), this.plugin);
         }
         return map;
