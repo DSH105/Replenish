@@ -1,6 +1,10 @@
 package com.dsh105.replenish;
 
 import com.dsh105.dshutils.DSHPlugin;
+import com.dsh105.dshutils.Metrics;
+import com.dsh105.dshutils.Updater;
+import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.replenish.commands.ReplenishCommand;
 import com.dsh105.replenish.commands.util.CommandManager;
 import com.dsh105.replenish.commands.util.DynamicPluginCommand;
@@ -9,10 +13,6 @@ import com.dsh105.replenish.listeners.BlockListener;
 import com.dsh105.replenish.util.InfoStorage;
 import com.dsh105.replenish.util.Lang;
 import com.dsh105.replenish.util.ReplenishLogger;
-import com.dsh105.dshutils.Metrics;
-import com.dsh105.dshutils.Updater;
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.logger.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

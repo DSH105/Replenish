@@ -3,7 +3,6 @@ package com.dsh105.replenish.config;
 
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.config.options.Options;
-import com.dsh105.dshutils.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
