@@ -2,7 +2,7 @@ name: ${project.name}
 version: ${project.version}
 author: DSH105
 website: ${project.url}
-main: ${main.class}
+main: com.dsh105.replenish.ReplenishPlugin
 permissions:
     replenish.replenish:
         default: op

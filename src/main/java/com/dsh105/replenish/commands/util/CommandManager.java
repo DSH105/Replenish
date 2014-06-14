@@ -17,9 +17,10 @@
 
 package com.dsh105.replenish.commands.util;
 
+import com.captainbern.reflection.Reflection;
+import com.captainbern.reflection.SafeField;
+import com.captainbern.reflection.accessor.FieldAccessor;
 import com.dsh105.replenish.ReplenishPlugin;
-import com.dsh105.replenish.util.reflection.FieldAccessor;
-import com.dsh105.replenish.util.reflection.SafeField;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -35,8 +36,8 @@ import java.util.Map;
 public class CommandManager {
 
     // This is a very ugly patch for PerWorldPlugins.
-    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(Bukkit.getPluginManager().getClass() /*<- ugly because of PWP*/, "commandMap");
-    protected static final FieldAccessor<Map<String, Command>> KNOWN_COMMANDS = new SafeField<Map<String, Command>>(SimpleCommandMap.class, "knownCommands");
+    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new Reflection().reflect(Bukkit.getPluginManager().getClass()/*<- ugly because of PWP*/).getSafeFieldByNameAndType("commandMap", CommandMap.class).getAccessor();
+    protected static final FieldAccessor<Map<String, Command>> KNOWN_COMMANDS = (FieldAccessor<Map<String, Command>>) new Reflection().reflect(SimpleCommandMap.class).getSafeFieldByNameAndType("knownCommands", Map.class);
     private final Plugin plugin;
     private CommandMap fallback;
 

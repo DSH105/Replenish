@@ -56,7 +56,7 @@ public enum Lang {
     }
 
     public static void sendTo(CommandSender sender, String msg) {
-        if (msg != null || !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
+        if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
             sender.sendMessage(ReplenishPlugin.getInstance().prefix + msg);
         }
     }
@@ -70,7 +70,7 @@ public enum Lang {
     @Override
     public String toString() {
         String result = ReplenishPlugin.getInstance().getConfig(ReplenishPlugin.ConfigType.LANG).getString(this.path, this.def);
-        if (result != null && result != "" && result != "none") {
+        if (result != null && !result.equals("") && !result.equals("none")) {
             return ChatColor.translateAlternateColorCodes('&', ReplenishPlugin.getInstance().getConfig(ReplenishPlugin.ConfigType.LANG).getString(this.path, this.def));
         } else {
             return "";

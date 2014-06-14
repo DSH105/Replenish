@@ -1,15 +1,15 @@
 package com.dsh105.replenish.listeners;
 
-import com.dsh105.dshutils.Particle;
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.util.EnumUtil;
-import com.dsh105.dshutils.util.StringUtil;
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.PlayerIdent;
+import com.dsh105.commodus.config.YAMLConfig;
+import com.dsh105.commodus.logging.Level;
 import com.dsh105.replenish.ReplenishPlugin;
 import com.dsh105.replenish.config.ConfigOptions;
 import com.dsh105.replenish.util.InfoStorage;
 import com.dsh105.replenish.util.Lang;
+import com.dsh105.replenish.util.Particle;
 import com.dsh105.replenish.util.Perm;
-import com.dsh105.replenish.util.ReplenishLogger;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -33,14 +33,14 @@ public class BlockListener implements Listener {
     }
 
     private HashMap<Location, Integer> restoreProcess = new HashMap<Location, Integer>();
-    YAMLConfig dataConfig = ReplenishPlugin.getInstance().getConfig(ReplenishPlugin.ConfigType.DATA);
+    private YAMLConfig dataConfig = ReplenishPlugin.getInstance().getConfig(ReplenishPlugin.ConfigType.DATA);
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (this.getInfoStorage().containsKey(player.getName())) {
+        if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(player))) {
             if (player.getItemInHand().getTypeId() == ConfigOptions.instance.getConfig().getInt("wand")) {
-                InfoStorage i = this.getInfoStorage().get(player.getName());
+                InfoStorage i = this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(player));
                 if (i.getInfo().equals("remove")) {
                     Block targetBlock = event.getClickedBlock();
                     int targetBlockX = targetBlock.getLocation().getBlockX();
@@ -58,7 +58,7 @@ public class BlockListener implements Listener {
                                     this.dataConfig.saveConfig();
                                     Lang.sendTo(player, Lang.BLOCK_REMOVED.toString().replace("%loc%", sLoc.replace(":", ", ")));
                                     if (!i.isBound()) {
-                                        this.getInfoStorage().remove(player.getName());
+                                        this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(player));
                                     }
                                     if (restoreProcess.containsKey(loc)) {
                                         targetBlock.setTypeId(restoreProcess.get(loc));
@@ -75,13 +75,12 @@ public class BlockListener implements Listener {
                     World world = targetBlock.getWorld();
                     Location loc = new Location(world, targetBlockX, targetBlockY, targetBlockZ);
                     String sLoc = serialiseLocation(loc);
-                    //String blockData = this.getInfoStorage().get(player.getName());
                     if (this.dataConfig.get(sLoc) == null) {
                         this.dataConfig.set("blocks." + sLoc, i.getInfo());
                         this.dataConfig.saveConfig();
                         Lang.sendTo(player, Lang.BLOCK_CREATED.toString().replace("%loc%", sLoc.replace(":", ", ")));
                         if (!i.isBound()) {
-                            this.getInfoStorage().remove(player.getName());
+                            this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(player));
                         }
                     } else {
                         Lang.sendTo(player, Lang.BLOCK_EXISTS.toString().replace("%loc%", sLoc.replace(":", ", ")));
@@ -155,11 +154,11 @@ public class BlockListener implements Listener {
     public void replenish(Player p, Block targetBlock, int mined, String drop, int restore) {
         Location l = targetBlock.getLocation();
         int dropChance = ConfigOptions.instance.getConfig().getInt("drop.chance", 100);
-        if (StringUtil.r().nextInt(99) < dropChance) {
+        if (GeneralUtil.random().nextInt(99) < dropChance) {
             int minAmount = ConfigOptions.instance.getConfig().getInt("drop.minQuantity", 1);
             int maxAmount = ConfigOptions.instance.getConfig().getInt("drop.maxQuantity", 3);
-            int i = StringUtil.r().nextInt(maxAmount - minAmount + 1);
-            if (StringUtil.r().nextInt(3) > 0) {
+            int i = GeneralUtil.random().nextInt(maxAmount - minAmount + 1);
+            if (GeneralUtil.random().nextInt(3) > 0) {
                 i /= 2;
             }
             int dropAmount = minAmount + i;
@@ -169,7 +168,7 @@ public class BlockListener implements Listener {
                 String id = drop.split(";")[1];
                 itemStack = ConfigOptions.instance.getSavedStack(id, targetBlock.getTypeId(), dropAmount);
                 if (itemStack == null) {
-                    ReplenishLogger.logSavedStack(id);
+                    ReplenishPlugin.LOG.console(Level.WARNING, "Failed to find saved stack of ID " + id + ". Please check your configuration.");
                     return;
                 }
             }
@@ -210,13 +209,7 @@ public class BlockListener implements Listener {
     }
 
     private String serialiseLocation(Location loc) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(loc.getWorld().getName()).append(":");
-        sb.append(loc.getBlockX()).append(":");
-        sb.append(loc.getBlockY()).append(":");
-        sb.append(loc.getBlockZ());
-        String location = sb.toString();
-        return location;
+        return loc.getWorld().getName() + ":" + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ();
     }
 
     private void playEffect(Player player, Location l) {
@@ -227,9 +220,9 @@ public class BlockListener implements Listener {
                     return;
                 }
             }
-            Particle p = null;
+            Particle p;
             String effect = ConfigOptions.instance.getConfig().getString("effect.type", "fire");
-            if (EnumUtil.isEnumType(Particle.class, effect.toUpperCase())) {
+            if (GeneralUtil.isEnumType(Particle.class, effect.toUpperCase())) {
                 p = Particle.valueOf(effect.toUpperCase());
             } else {
                 p = Particle.FIRE;

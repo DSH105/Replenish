@@ -1,9 +1,11 @@
 package com.dsh105.replenish.commands;
 
-import com.dsh105.dshutils.Updater;
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.pagination.Paginator;
-import com.dsh105.dshutils.util.StringUtil;
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.PlayerIdent;
+import com.dsh105.commodus.StringUtil;
+import com.dsh105.commodus.config.YAMLConfig;
+import com.dsh105.commodus.data.Updater;
+import com.dsh105.commodus.paginator.StringPaginator;
 import com.dsh105.replenish.ReplenishPlugin;
 import com.dsh105.replenish.util.InfoStorage;
 import com.dsh105.replenish.util.Lang;
@@ -21,7 +23,7 @@ import java.util.HashMap;
 public class ReplenishCommand implements CommandExecutor {
 
     public String cmdLabel;
-    public Paginator help;
+    public StringPaginator help;
 
     private static String[] CREATE_HELP = new String[]{
             ChatColor.AQUA + "/replenish create <id-when-mined> <item-drop> <restore-time>",
@@ -41,7 +43,7 @@ public class ReplenishCommand implements CommandExecutor {
         this.help = this.generateHelp();
     }
 
-    private Paginator generateHelp() {
+    private StringPaginator generateHelp() {
         String[] s = new String[]{
                 ChatColor.AQUA + "/replenish help <command>" + ChatColor.DARK_AQUA + " - View help for a command (e.g. /replenish help create).",
                 ChatColor.AQUA + "/replenish bind <id-when-mined> <item-drop> <restore-time>" + ChatColor.DARK_AQUA + " - Bind the wand to continuously add Replenish data to blocks.",
@@ -51,7 +53,7 @@ public class ReplenishCommand implements CommandExecutor {
                 ChatColor.AQUA + "/replenish create <listen-id> <id-when-mined> <item-drop> <restore-time> <world-name>" + ChatColor.DARK_AQUA + " - Restore certain blocks in a world according to their ID.",
                 ChatColor.AQUA + "/replenish remove <world_name>" + ChatColor.DARK_AQUA + " - Remove replenish data for a specific world."
         };
-        return new Paginator(s, 5);
+        return new StringPaginator(5, s);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class ReplenishCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                 return true;
             } else if (args.length == 2) {
-                if (StringUtil.isInt(args[1])) {
+                if (GeneralUtil.isInt(args[1])) {
                     String[] help = this.help.getPage(Integer.parseInt(args[1]));
                     if (help == null) {
                         Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
@@ -105,9 +107,9 @@ public class ReplenishCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("create")) {
                 if (Perm.CREATE.hasPerm(sender, true, false)) {
                     Player p = (Player) sender;
-                    if (this.getInfoStorage().containsKey(p.getName())) {
-                        if (!this.getInfoStorage().get(p.getName()).getInfo().equals("remove")) {
-                            this.getInfoStorage().remove(p.getName());
+                    if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(p))) {
+                        if (!this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).getInfo().equals("remove")) {
+                            this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(p));
                             Lang.sendTo(sender, Lang.WAND_DEACTIVATED.toString());
                             return true;
                         }
@@ -120,8 +122,8 @@ public class ReplenishCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("unbind")) {
                 if (Perm.UNBIND.hasPerm(sender, true, false)) {
                     Player p = (Player) sender;
-                    if (this.getInfoStorage().containsKey(p.getName()) && this.getInfoStorage().get(p.getName()).isBound()) {
-                        this.getInfoStorage().remove(p.getName());
+                    if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(p)) && this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).isBound()) {
+                        this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(p));
                         Lang.sendTo(sender, Lang.WAND_UNBOUND.toString());
                     } else {
                         Lang.sendTo(sender, Lang.WAND_NOT_BOUND.toString());
@@ -132,12 +134,12 @@ public class ReplenishCommand implements CommandExecutor {
                 if (Perm.REMOVE.hasPerm(sender, true, false)) {
                     Player p = (Player) sender;
                     if (this.getInfoStorage().containsKey(p.getName())) {
-                        if (this.getInfoStorage().get(p.getName()).getInfo().equals("remove")) {
-                            this.getInfoStorage().remove(p.getName());
+                        if (this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).getInfo().equals("remove")) {
+                            this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(p));
                             Lang.sendTo(sender, Lang.WAND_DEACTIVATED.toString());
                         }
                     } else {
-                        this.getInfoStorage().put(p.getName(), new InfoStorage("remove", false));
+                        this.getInfoStorage().put(PlayerIdent.getIdentificationForAsString(p), new InfoStorage("remove", false));
                         Lang.sendTo(sender, Lang.WAND_ACTIVATED.toString());
                     }
                     return true;
@@ -146,7 +148,6 @@ public class ReplenishCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("update")) {
                 if (Perm.UPDATE.hasPerm(sender, true, true)) {
                     if (ReplenishPlugin.getInstance().updateChecked) {
-                        @SuppressWarnings("unused")
                         Updater updater = new Updater(ReplenishPlugin.getInstance(), 53655, ReplenishPlugin.getInstance().file(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     } else {
                         Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.toString());
@@ -200,18 +201,18 @@ public class ReplenishCommand implements CommandExecutor {
                     String s = "";
                     for (int i = 1; i <= 3; i++) {
                         if (i == 2 && args[i].contains("id;")) {
-                            s = s + ((s == "" || s == null) ? "id;" + args[i].split(";")[1] : ":id;" + args[i].split(";")[1]);
-                        } else if (StringUtil.isInt(args[i])) {
-                            s = s + ((s == "" || s == null) ? "" + args[i] : ":" + args[i]);
+                            s = s + ((s.isEmpty()) ? "id;" + args[i].split(";")[1] : ":id;" + args[i].split(";")[1]);
+                        } else if (GeneralUtil.isInt(args[i])) {
+                            s = s + ((s.isEmpty()) ? "" + args[i] : ":" + args[i]);
                         } else {
                             Lang.sendTo(sender, Lang.INT_ONLY.toString().replace("%string%", args[i]).replace("%argNum%", "" + i));
                             return true;
                         }
                     }
-                    if (this.getInfoStorage().containsKey(p.getName()) && !this.getInfoStorage().get(p.getName()).getInfo().equals(s)) {
+                    if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(p)) && !this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).getInfo().equals(s)) {
                         Lang.sendTo(sender, Lang.WAND_ACTIVE.toString());
                     } else {
-                        this.getInfoStorage().put(p.getName(), new InfoStorage(s, bound));
+                        this.getInfoStorage().put(PlayerIdent.getIdentificationForAsString(p), new InfoStorage(s, bound));
                         Lang.sendTo(sender, bound ? Lang.WAND_BOUND.toString() : Lang.WAND_ACTIVATED.toString());
                     }
                     return true;
@@ -224,9 +225,9 @@ public class ReplenishCommand implements CommandExecutor {
                     for (int i = 1; i <= 4; i++) {
                         // Find saved stack by id
                         if (i == 3 && args[i].contains("id;")) {
-                            s = s + ((s == "" || s == null) ? "id;" + args[i].split(";")[1] : ":id;" + args[i].split(";")[1]);
-                        } else if (StringUtil.isInt(args[i])) {
-                            s = s + ((s == "" || s == null) ? "" + args[i] : ":" + args[i]);
+                            s = s + ((s.isEmpty()) ? "id;" + args[i].split(";")[1] : ":id;" + args[i].split(";")[1]);
+                        } else if (GeneralUtil.isInt(args[i])) {
+                            s = s + ((s.isEmpty()) ? "" + args[i] : ":" + args[i]);
                         } else if (i == 1 && args[i].equalsIgnoreCase("all")) {
                             s = args[i].toLowerCase();
                         } else {
