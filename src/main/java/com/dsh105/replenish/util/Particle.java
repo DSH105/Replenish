@@ -26,7 +26,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 // TODO: Redo this, it's not very well done
@@ -61,8 +60,7 @@ public enum Particle {
     VOID("townaura", 1f, 100),
 
     BLOCK_BREAK("blockcrack", 0.1F, 100),
-    BLOCK_DUST("blockdust", 0.1F, 100),
-    ;
+    BLOCK_DUST("blockdust", 0.1F, 100),;
 
     private static Random RANDOM = GeneralUtil.random();
 
@@ -141,7 +139,7 @@ public enum Particle {
         }
     }
 
-    private static void sendPacket(Player p, Object packet)  {
+    private static void sendPacket(Player p, Object packet) {
         try {
             Object nmsPlayer = new Reflection().reflect(p.getClass()).getSafeMethod("getHandle", Player.class).getAccessor().invoke(p);
             Object con = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);

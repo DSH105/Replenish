@@ -1,3 +1,20 @@
+/*
+ * This file is part of Replenish.
+ *
+ * Replenish is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Replenish is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Replenish.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dsh105.replenish;
 
 import com.dsh105.commodus.config.YAMLConfig;
@@ -54,7 +71,7 @@ public class ReplenishPlugin extends JavaPlugin {
 
         COMMAND_MANAGER = new CommandManager(this);
 
-        config = configManager.getNewConfig("config.yml", new String[] {"Replenish By DSH105", "---------------------", "Plugin Requested By Fire_Feather", "---------------------",});
+        config = configManager.getNewConfig("config.yml", new String[]{"Replenish By DSH105", "---------------------", "Plugin Requested By Fire_Feather", "---------------------",});
         config.reloadConfig();
 
         ChatColor colour1 = ChatColor.getByChar(this.getConfig(ConfigType.MAIN).getString("primaryChatColour", "3"));
@@ -71,7 +88,7 @@ public class ReplenishPlugin extends JavaPlugin {
 
         options = new ConfigOptions(config);
 
-        langConfig = configManager.getNewConfig("lang.yml", new String[] {"Replenish By DSH105", "---------------------", "Language Configuration File"});
+        langConfig = configManager.getNewConfig("lang.yml", new String[]{"Replenish By DSH105", "---------------------", "Language Configuration File"});
         for (Lang l : Lang.values()) {
             String[] desc = l.getDescription();
             langConfig.set(l.getPath(), langConfig.getString(l.getPath(), l.toString_()
