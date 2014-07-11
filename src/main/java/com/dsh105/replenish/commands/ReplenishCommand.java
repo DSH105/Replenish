@@ -18,7 +18,7 @@
 package com.dsh105.replenish.commands;
 
 import com.dsh105.commodus.GeneralUtil;
-import com.dsh105.commodus.PlayerIdent;
+import com.dsh105.commodus.IdentUtil;
 import com.dsh105.commodus.StringUtil;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.commodus.data.Updater;
@@ -78,7 +78,7 @@ public class ReplenishCommand implements CommandExecutor {
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
                 String[] help = this.help.getPage(1);
-                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help 1/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help 1/" + this.help.getPages() + "  " + ChatColor.DARK_AQUA + "----------------");
                 sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
                 for (String s : help) {
                     sender.sendMessage(s);
@@ -92,7 +92,7 @@ public class ReplenishCommand implements CommandExecutor {
                         Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
                         return true;
                     }
-                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " Replenish Help " + args[1] + "/" + this.help.getPages() + "  " + ChatColor.DARK_AQUA + "----------------");
                     for (String s : help) {
                         sender.sendMessage(s);
                     }
@@ -124,9 +124,9 @@ public class ReplenishCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("create")) {
                 if (Perm.CREATE.hasPerm(sender, true, false)) {
                     Player p = (Player) sender;
-                    if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(p))) {
-                        if (!this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).getInfo().equals("remove")) {
-                            this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(p));
+                    if (this.getInfoStorage().containsKey(IdentUtil.getIdentificationForAsString(p))) {
+                        if (!this.getInfoStorage().get(IdentUtil.getIdentificationForAsString(p)).getInfo().equals("remove")) {
+                            this.getInfoStorage().remove(IdentUtil.getIdentificationForAsString(p));
                             Lang.sendTo(sender, Lang.WAND_DEACTIVATED.toString());
                             return true;
                         }
@@ -139,8 +139,8 @@ public class ReplenishCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("unbind")) {
                 if (Perm.UNBIND.hasPerm(sender, true, false)) {
                     Player p = (Player) sender;
-                    if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(p)) && this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).isBound()) {
-                        this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(p));
+                    if (this.getInfoStorage().containsKey(IdentUtil.getIdentificationForAsString(p)) && this.getInfoStorage().get(IdentUtil.getIdentificationForAsString(p)).isBound()) {
+                        this.getInfoStorage().remove(IdentUtil.getIdentificationForAsString(p));
                         Lang.sendTo(sender, Lang.WAND_UNBOUND.toString());
                     } else {
                         Lang.sendTo(sender, Lang.WAND_NOT_BOUND.toString());
@@ -151,12 +151,12 @@ public class ReplenishCommand implements CommandExecutor {
                 if (Perm.REMOVE.hasPerm(sender, true, false)) {
                     Player p = (Player) sender;
                     if (this.getInfoStorage().containsKey(p.getName())) {
-                        if (this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).getInfo().equals("remove")) {
-                            this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(p));
+                        if (this.getInfoStorage().get(IdentUtil.getIdentificationForAsString(p)).getInfo().equals("remove")) {
+                            this.getInfoStorage().remove(IdentUtil.getIdentificationForAsString(p));
                             Lang.sendTo(sender, Lang.WAND_DEACTIVATED.toString());
                         }
                     } else {
-                        this.getInfoStorage().put(PlayerIdent.getIdentificationForAsString(p), new InfoStorage("remove", false));
+                        this.getInfoStorage().put(IdentUtil.getIdentificationForAsString(p), new InfoStorage("remove", false));
                         Lang.sendTo(sender, Lang.WAND_ACTIVATED.toString());
                     }
                     return true;
@@ -226,10 +226,10 @@ public class ReplenishCommand implements CommandExecutor {
                             return true;
                         }
                     }
-                    if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(p)) && !this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(p)).getInfo().equals(s)) {
+                    if (this.getInfoStorage().containsKey(IdentUtil.getIdentificationForAsString(p)) && !this.getInfoStorage().get(IdentUtil.getIdentificationForAsString(p)).getInfo().equals(s)) {
                         Lang.sendTo(sender, Lang.WAND_ACTIVE.toString());
                     } else {
-                        this.getInfoStorage().put(PlayerIdent.getIdentificationForAsString(p), new InfoStorage(s, bound));
+                        this.getInfoStorage().put(IdentUtil.getIdentificationForAsString(p), new InfoStorage(s, bound));
                         Lang.sendTo(sender, bound ? Lang.WAND_BOUND.toString() : Lang.WAND_ACTIVATED.toString());
                     }
                     return true;

@@ -18,7 +18,7 @@
 package com.dsh105.replenish.listeners;
 
 import com.dsh105.commodus.GeneralUtil;
-import com.dsh105.commodus.PlayerIdent;
+import com.dsh105.commodus.IdentUtil;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.commodus.logging.Level;
 import com.dsh105.replenish.ReplenishPlugin;
@@ -55,9 +55,9 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (this.getInfoStorage().containsKey(PlayerIdent.getIdentificationForAsString(player))) {
+        if (this.getInfoStorage().containsKey(IdentUtil.getIdentificationForAsString(player))) {
             if (player.getItemInHand().getTypeId() == ConfigOptions.instance.getConfig().getInt("wand")) {
-                InfoStorage i = this.getInfoStorage().get(PlayerIdent.getIdentificationForAsString(player));
+                InfoStorage i = this.getInfoStorage().get(IdentUtil.getIdentificationForAsString(player));
                 if (i.getInfo().equals("remove")) {
                     Block targetBlock = event.getClickedBlock();
                     int targetBlockX = targetBlock.getLocation().getBlockX();
@@ -75,7 +75,7 @@ public class BlockListener implements Listener {
                                     this.dataConfig.saveConfig();
                                     Lang.sendTo(player, Lang.BLOCK_REMOVED.toString().replace("%loc%", sLoc.replace(":", ", ")));
                                     if (!i.isBound()) {
-                                        this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(player));
+                                        this.getInfoStorage().remove(IdentUtil.getIdentificationForAsString(player));
                                     }
                                     if (restoreProcess.containsKey(loc)) {
                                         targetBlock.setTypeId(restoreProcess.get(loc));
@@ -97,7 +97,7 @@ public class BlockListener implements Listener {
                         this.dataConfig.saveConfig();
                         Lang.sendTo(player, Lang.BLOCK_CREATED.toString().replace("%loc%", sLoc.replace(":", ", ")));
                         if (!i.isBound()) {
-                            this.getInfoStorage().remove(PlayerIdent.getIdentificationForAsString(player));
+                            this.getInfoStorage().remove(IdentUtil.getIdentificationForAsString(player));
                         }
                     } else {
                         Lang.sendTo(player, Lang.BLOCK_EXISTS.toString().replace("%loc%", sLoc.replace(":", ", ")));
