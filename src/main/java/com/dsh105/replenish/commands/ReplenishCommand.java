@@ -21,7 +21,7 @@ import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.commodus.IdentUtil;
 import com.dsh105.commodus.StringUtil;
 import com.dsh105.commodus.config.YAMLConfig;
-import com.dsh105.commodus.data.Updater;
+import com.dsh105.replenish.util.Updater;
 import com.dsh105.commodus.paginator.StringPaginator;
 import com.dsh105.replenish.ReplenishPlugin;
 import com.dsh105.replenish.util.InfoStorage;
