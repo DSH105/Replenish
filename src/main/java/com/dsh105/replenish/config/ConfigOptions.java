@@ -56,7 +56,7 @@ public class ConfigOptions extends Options {
                 }
                 meta.setLore(list);
             } else {
-                meta.setLore(Arrays.asList(new String[]{ChatColor.translateAlternateColorCodes('&', lore)}));
+                meta.setLore(Arrays.asList(ChatColor.translateAlternateColorCodes('&', lore)));
             }
         }
         i.setItemMeta(meta);
