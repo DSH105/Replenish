@@ -36,16 +36,10 @@
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
 
-        <!-- DSH Repo - Commodus -->
+        <!-- DSH Repo -->
         <repository>
             <id>dsh-repo</id>
             <url>http://repo.dsh105.com/</url>
-        </repository>
-
-        <!-- Hawk Repo - Reflection -->
-        <repository>
-            <id>hawk-repo</id>
-            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
@@ -63,13 +57,6 @@
             <groupId>com.dsh105</groupId>
             <artifactId>Commodus</artifactId>
             <version>1.0.2-SNAPSHOT</version>
-        </dependency>
-
-        <!-- Reflection -->
-        <dependency>
-            <groupId>com.captainbern</groupId>
-            <artifactId>Minecraft-Reflection</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
@@ -131,7 +118,6 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.dsh105:Commodus</include>
-                                    <include>com.captainbern:Minecraft-Reflection</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
