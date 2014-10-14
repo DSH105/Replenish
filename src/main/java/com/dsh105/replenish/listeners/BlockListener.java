@@ -21,11 +21,11 @@ import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.commodus.IdentUtil;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.commodus.logging.Level;
+import com.dsh105.commodus.particle.Particle;
 import com.dsh105.replenish.ReplenishPlugin;
 import com.dsh105.replenish.config.ConfigOptions;
 import com.dsh105.replenish.util.InfoStorage;
 import com.dsh105.replenish.util.Lang;
-import com.dsh105.replenish.util.Particle;
 import com.dsh105.replenish.util.Perm;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -246,9 +246,9 @@ public class BlockListener implements Listener {
             }
 
             if (playerOnly) {
-                p.sendToPlayer(l, player);
+                p.builder().withLocation(l.toVector()).show(player);
             } else {
-                p.sendTo(l);
+                p.builder().withLocation(l.toVector()).show(l);
             }
         }
     }
