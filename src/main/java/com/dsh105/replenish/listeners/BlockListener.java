@@ -115,9 +115,7 @@ public class BlockListener implements Listener {
                 event.setCancelled(true);
             }
         }
-        if (player.getItemInHand().getTypeId() == ConfigOptions.instance.getConfig().getInt("wand")) {
-            return;
-        }
+
         Block targetBlock = event.getBlock();
         Location loc = targetBlock.getLocation();
         String sLoc = serialiseLocation(loc);
