@@ -17,23 +17,16 @@
 
 package com.dsh105.replenish.commands.util;
 
-import org.bukkit.command.CommandMap;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.help.HelpTopicFactory;
 
-public class FallbackCommandRegistrationListener implements Listener {
+/**
+ * From Influx: http://github.com/DSH105/Influx/
+ */
+public class InfluxCommandHelpTopicFactory implements HelpTopicFactory<InfluxCommand> {
 
-    protected final CommandMap fallback;
-
-    public FallbackCommandRegistrationListener(CommandMap commandMap) {
-        this.fallback = commandMap;
-    }
-
-    @EventHandler
-    public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (this.fallback.dispatch(event.getPlayer(), event.getMessage())) {
-            event.setCancelled(true);
-        }
+    @Override
+    public HelpTopic createTopic(InfluxCommand influxCommand) {
+        return new InfluxCommandHelpTopic(influxCommand);
     }
 }

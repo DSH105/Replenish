@@ -37,9 +37,9 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
+// TODO: Migrate to Influx
 public class ReplenishCommand implements CommandExecutor {
 
-    public String cmdLabel;
     public StringPaginator help;
 
     private static String[] CREATE_HELP = new String[]{
@@ -55,8 +55,7 @@ public class ReplenishCommand implements CommandExecutor {
             ChatColor.DARK_AQUA + "- World Name " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + "String" + ChatColor.DARK_AQUA + "): World affected by the Replenish data."
     };
 
-    public ReplenishCommand(String cmdLabel) {
-        this.cmdLabel = cmdLabel;
+    public ReplenishCommand() {
         this.help = this.generateHelp();
     }
 

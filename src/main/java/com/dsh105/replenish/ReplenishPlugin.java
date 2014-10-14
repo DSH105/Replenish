@@ -23,8 +23,8 @@ import com.dsh105.commodus.data.Metrics;
 import com.dsh105.commodus.data.Updater;
 import com.dsh105.commodus.logging.Log;
 import com.dsh105.replenish.commands.ReplenishCommand;
-import com.dsh105.replenish.commands.util.CommandManager;
-import com.dsh105.replenish.commands.util.DynamicPluginCommand;
+import com.dsh105.replenish.commands.util.BukkitRegistry;
+import com.dsh105.replenish.commands.util.InfluxCommand;
 import com.dsh105.replenish.config.ConfigOptions;
 import com.dsh105.replenish.listeners.BlockListener;
 import com.dsh105.replenish.util.InfoStorage;
@@ -62,15 +62,14 @@ public class ReplenishPlugin extends JavaPlugin {
     public String cmdString = "replenish";
 
     public HashMap<String, InfoStorage> infoStorage = new HashMap<String, InfoStorage>();
-    private CommandManager COMMAND_MANAGER;
+    private BukkitRegistry commandRegistry;
 
     @Override
     public void onEnable() {
         INSTANCE = this;
         LOG = new Log("Replenish");
 
-        COMMAND_MANAGER = new CommandManager(this);
-
+        configManager = new YAMLConfigManager(this);
         config = configManager.getNewConfig("config.yml", new String[]{"Replenish By DSH105", "---------------------", "Plugin Requested By Fire_Feather", "---------------------",});
         config.reloadConfig();
 
@@ -101,9 +100,11 @@ public class ReplenishPlugin extends JavaPlugin {
 
         this.prefix = Lang.PREFIX.toString();
 
-        DynamicPluginCommand petCmd = new DynamicPluginCommand(this.cmdString, new String[0], "Create blocks that automagically restore themselves and drop custom items.", "Use /" + this.cmdString + " help to see the command list.", new ReplenishCommand(this.cmdString), null, this);
-        petCmd.setPermission("replenish.replenish");
-        COMMAND_MANAGER.register(petCmd);
+        commandRegistry = new BukkitRegistry();
+
+        InfluxCommand command = new InfluxCommand(this, new ReplenishCommand(), this.cmdString, "Create blocks that automagically restore themselves and drop custom items.", "Use /" + this.cmdString + " help to see the command list.", "replenish");
+        command.setPermission("replenish.replenish");
+        commandRegistry.register(command);
 
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
 
