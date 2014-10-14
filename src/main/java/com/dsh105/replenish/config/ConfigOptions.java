@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ConfigOptions extends Options {
 
@@ -40,24 +41,30 @@ public class ConfigOptions extends Options {
         Material mat = Material.getMaterial(this.config.getInt("drops." + id + ".material", defMaterial));
         int amount = this.config.getInt("drops." + id + ".amount", defAmount);
         String name = this.config.getString("drops." + id + ".name", "");
-        String lore = this.config.getString("drops." + id + ".lore", "");
+        Object objectLore = this.config.get("drops." + id + ".lore");
+        ArrayList<String> loreList = new ArrayList<String>();
+
+        if (objectLore instanceof String) {
+            String[] s = ((String) objectLore).split(",");
+            for (String str : s) {
+                loreList.add(ChatColor.translateAlternateColorCodes('&', str));
+            }
+        } else {
+            List<String> lore = this.config.config().getStringList("drops." + id + ".lore");
+            if (lore != null && !lore.isEmpty()) {
+                for (String part : lore) {
+                    loreList.add(ChatColor.translateAlternateColorCodes('&', part));
+                }
+            }
+        }
 
         ItemStack i = new ItemStack(mat, amount);
         ItemMeta meta = i.getItemMeta();
         if (name != null && !name.equalsIgnoreCase("")) {
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
         }
-        if (lore != null && !lore.equalsIgnoreCase("")) {
-            if (lore.contains(",")) {
-                String[] s = lore.split(",");
-                ArrayList<String> list = new ArrayList<String>();
-                for (String str : s) {
-                    list.add(ChatColor.translateAlternateColorCodes('&', str));
-                }
-                meta.setLore(list);
-            } else {
-                meta.setLore(Arrays.asList(ChatColor.translateAlternateColorCodes('&', lore)));
-            }
+        if (!loreList.isEmpty()) {
+            meta.setLore(loreList);
         }
         i.setItemMeta(meta);
         return i;
@@ -84,7 +91,7 @@ public class ConfigOptions extends Options {
         this.set("drops.example.material", 264, "Example drops configuration");
         this.set("drops.example.amount", 2);
         this.set("drops.example.name", "&bSpecial Diamond");
-        this.set("drops.example.lore", "&3&oFancy Description,&3&oEven has two lines!");
+        this.set("drops.example.lore", Arrays.asList("&3&oFancy Description", "&3&oEven has two lines!"));
 
         config.saveConfig();
     }

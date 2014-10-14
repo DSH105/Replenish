@@ -164,7 +164,7 @@ public class ReplenishCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("update")) {
                 if (Perm.UPDATE.hasPerm(sender, true, true)) {
                     if (ReplenishPlugin.getInstance().updateChecked) {
-                        Updater updater = new Updater(ReplenishPlugin.getInstance(), 53655, ReplenishPlugin.getInstance().file(), Updater.UpdateType.NO_VERSION_CHECK, true);
+                        new Updater(ReplenishPlugin.getInstance(), 53655, ReplenishPlugin.getInstance().file(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     } else {
                         Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.toString());
                     }
